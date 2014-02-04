@@ -37,6 +37,10 @@ public class JarSearch {
     display.dispose();
   }
 
+  public void completeSearch() {
+    searcher = null;
+  }
+
   protected void createContents(Shell shell) {
     GridLayout layout = new GridLayout(1, false);
     shell.setLayout(layout);
@@ -54,7 +58,8 @@ public class JarSearch {
 
     new Label(composite, SWT.RIGHT).setText("Class Name:");
     final Text classText = new Text(composite, SWT.SINGLE | SWT.BORDER);
-    classText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 5, 1));
+    classText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 5,
+        1));
     classText.addModifyListener(new ModifyListener() {
       @Override
       public void modifyText(ModifyEvent arg0) {
@@ -78,7 +83,7 @@ public class JarSearch {
     });
 
     final Button browseFile = new Button(composite, SWT.PUSH);
-    browseFile.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+    browseFile.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
     browseFile.setText("Browse File...");
     browseFile.addSelectionListener(new SelectionListener() {
       @Override
@@ -100,7 +105,7 @@ public class JarSearch {
     });
 
     final Button browseFolder = new Button(composite, SWT.PUSH);
-    browseFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+    browseFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
     browseFolder.setText("Browse Folder...");
     browseFolder.addSelectionListener(new SelectionListener() {
       @Override
@@ -121,7 +126,7 @@ public class JarSearch {
 
   protected void createButtons(final Shell shell) {
     Composite composite = new Composite(shell, SWT.NONE);
-    composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+    composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
     composite.setLayout(new GridLayout(1, false));
 
     searchButton = new Button(composite, SWT.PUSH);
@@ -155,11 +160,11 @@ public class JarSearch {
 
   protected void createStatus(final Shell shell) {
     Composite composite = new Composite(shell, SWT.NONE);
-    composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+    composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
     composite.setLayout(new GridLayout(1, false));
 
     status = new Label(composite, SWT.NONE);
-    status.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+    status.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
     status.setText("Ready");
   }
 

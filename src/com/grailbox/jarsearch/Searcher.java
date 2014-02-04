@@ -35,6 +35,7 @@ public class Searcher implements Runnable {
         || jarSearch.fileOrFolder.length() == 0) {
       updateStatus("File or folder to search in must be specified");
     } else {
+      removeResults();
       File file = new File(jarSearch.fileOrFolder);
       if (!file.exists()) {
         updateStatus("File or folder " + jarSearch.fileOrFolder
@@ -68,17 +69,25 @@ public class Searcher implements Runnable {
             name = "";
           }
           return file.isDirectory() || name.endsWith(".jar")
-              || name.endsWith(".zip");
+              || name.endsWith(".zip")
+              || name.indexOf(jarSearch.className) > -1;
         }
       });
 
       for (File file : matches) {
-        if (isStopped) {
-          break;
-        } else if (file.isDirectory()) {
-          searchDirectory(file);
-        } else {
-          searchFile(file);
+        try {
+          String filename = file.getCanonicalPath();
+          if (isStopped) {
+            break;
+          } else if (file.isDirectory()) {
+            searchDirectory(file);
+          } else if (filename.endsWith(".zip") || filename.endsWith(".jar")) {
+            searchFile(file);
+          } else {
+            addResult(filename);
+          }
+        } catch (IOException e) {
+
         }
       }
     }
@@ -97,7 +106,7 @@ public class Searcher implements Runnable {
             .hasMoreElements() && !isStopped;) {
           ZipEntry entry = files.nextElement();
           if (entry.getName().indexOf(jarSearch.className) > -1) {
-            jarSearch.output.add(entry.getName());
+            addResult(file.getCanonicalPath() + " : " + entry.getName());
           }
         }
       } catch (Exception e) {
@@ -159,6 +168,7 @@ public class Searcher implements Runnable {
           jarSearch.searchButton.setEnabled(true);
           if (isStopped)
             jarSearch.status.setText("Cancelled");
+          jarSearch.completeSearch();
         }
       });
     }
